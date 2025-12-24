@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>🎄 Christmas Gifts 九宮格</title>
+
+<style>
+body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    background: linear-gradient(135deg, #c62828, #2e7d32);
+    margin: 0;
+    padding: 20px;
+    color: #fff;
+    text-align: center;
+}
+
+h1 { margin-bottom: 8px; }
+
+.board {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 12px;
+    max-width: 360px;
+    margin: 20px auto;
+}
+
+.cell {
+    background: #fff;
+    color: #333;
+    border-radius: 16px;
+    padding: 10px;
+    aspect-ratio: 1 / 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    cursor: pointer;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+}
+
+.cell:active { transform: scale(0.95); }
+
+.cell img {
+    max-height: 60px;
+    object-fit: contain;
+}
+
+.reward {
+    font-size: 14px;
+    font-weight: bold;
+}
+
+button {
+    margin: 10px 6px;
+    padding: 10px 18px;
+    border-radius: 20px;
+    border: none;
+    font-size: 14px;
+    cursor: pointer;
+    background: #ffeb3b;
+    color: #333;
+    font-weight: bold;
+}
+</style>
+</head>
+
+<body>
+
+<h1>🎁 Christmas Gifts</h1>
+<div>點格子抽獎，抽完還可以再抽</div>
+
+<div class="board" id="board"></div>
+
+<button onclick="resetBoard()">重新抽一輪</button>
+<button onclick="toggleMusic()">🎵 音樂 開 / 關</button>
+
+<!-- 背景音樂 -->
+<audio id="bgm" loop>
+  <source src="https://cdn.pixabay.com/audio/2022/12/06/audio_5e2c47bb5a.mp3" type="audio/mpeg">
+</audio>
+
+<script>
+const rewards = [
+  "說三次我最愛你 ❤️",
+  "即刻親親 10 下 😘",
+  "偷偷在對方耳邊說一句情話 🤗",
+  "額頭親親 5 下 😳",
+  "說一句平常不好意思說的話 💓",
+  "直視對方眼睛 10 秒看誰先笑✨",
+  "幫對方按摩 3 分鐘 💆",
+  "合照一張超醜的照片 🤡",
+  "用撒嬌語氣告白一次 ❤️‍🔥"
+];
+
+const images = [
+  "https://upload.wikimedia.org/wikipedia/commons/thumb/5/5c/Cartoon_dog.svg/512px-Cartoon_dog.svg.png",
+  "https://upload.wikimedia.org/wikipedia/commons/thumb/3/3f/Cow_cartoon.svg/512px-Cow_cartoon.svg.png"
+];
+
+const board = document.getElementById("board");
+const bgm = document.getElementById("bgm");
+let musicOn = false;
+
+function createBoard() {
+  board.innerHTML = "";
+  for (let i = 0; i < 9; i++) {
+    const cell = document.createElement("div");
+    cell.className = "cell";
+
+    const img = document.createElement("img");
+    img.src = images[i % 2];
+
+    const text = document.createElement("div");
+    text.className = "reward";
+    text.innerText = "點我抽獎";
+
+    cell.appendChild(img);
+    cell.appendChild(text);
+
+    cell.onclick = () => {
+      const r = rewards[Math.floor(Math.random() * rewards.length)];
+      text.innerText = r;
+      if (!musicOn) {
+        bgm.play();
+        musicOn = true;
+      }
+    };
+
+    board.appendChild(cell);
+  }
+}
+
+function resetBoard() {
+  createBoard();
+}
+
+function toggleMusic() {
+  if (musicOn) {
+    bgm.pause();
+    musicOn = false;
+  } else {
+    bgm.play();
+    musicOn = true;
+  }
+}
+
+createBoard();
+</script>
+
+</body>
+</html>
